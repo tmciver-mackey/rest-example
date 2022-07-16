@@ -5,8 +5,6 @@
 
 module Web.API where
 
-import Protolude
-
 import Note
 import Servant
 

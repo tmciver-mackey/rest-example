@@ -8,7 +8,6 @@ module Web.Handlers
 
 import Protolude hiding (Handler)
 
-import Data.Map (Map)
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 import Note
@@ -18,8 +17,8 @@ allNotes :: Handler [Note]
 allNotes = pure $ Map.elems notes
 
 getNoteById :: NoteId -> Handler Note
-getNoteById noteId =
-  case Map.lookup noteId notes of
+getNoteById noteId' =
+  case Map.lookup noteId' notes of
     Nothing -> throwError err404
     Just n -> pure n
 
