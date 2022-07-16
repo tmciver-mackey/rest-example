@@ -24,6 +24,16 @@ getNoteById noteId' =
 
 notes :: Map NoteId Note
 notes = Map.fromList
-  [ (NoteId "abc", Note (NoteId "abc") "My first note" "Lorem Ipsum" (Set.fromList [Tag "IBM", Tag "AAPL"]))
-  , (NoteId "123", Note (NoteId "123") "My second note" "Lorem Ipsum" Set.empty)
+  [ (NoteId "abc", Note (NoteId "abc")
+                        "My first note"
+                        "Lorem Ipsum"
+                        (Set.fromList [Tag "IBM", Tag "AAPL"])
+                        (Set.fromList [AttachmentId "sdflkjs", AttachmentId "woidclm"])
+    )
+  , (NoteId "123", Note (NoteId "123")
+                        "My second note"
+                        "Lorem Ipsum"
+                        Set.empty
+                        (Set.fromList [AttachmentId "wqowok", AttachmentId "apoijmnsoi"])
+    )
   ]

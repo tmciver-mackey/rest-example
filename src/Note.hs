@@ -17,11 +17,16 @@ newtype NoteId = NoteId Text
   deriving (Eq, Ord, Show, Generic)
   deriving (ToJSON, FromHttpApiData) via Text
 
+newtype AttachmentId = AttachmentId Text
+  deriving (Eq, Ord, Show, Generic)
+  deriving (ToJSON) via Text
+
 data Note = Note
   { noteId :: NoteId
   , noteTitle :: Text
   , noteBody :: Text
   , noteTags :: Set Tag
+  , noteAttachmentIds :: Set AttachmentId
   } deriving (Eq, Show, Generic)
 
 instance ToJSON Note where
