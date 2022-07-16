@@ -4,10 +4,12 @@
 module Web.Handlers
     ( allNotes
     , getNoteById
+    , getAttachmentById
     ) where
 
 import Protolude hiding (Handler)
 
+import qualified Data.ByteString as BS
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 import Note
@@ -21,6 +23,19 @@ getNoteById noteId' =
   case Map.lookup noteId' notes of
     Nothing -> throwError err404
     Just n -> pure n
+
+getAttachmentById :: AttachmentId -> Handler ByteString
+getAttachmentById attachmentId' = do
+  let fileMap :: Map AttachmentId FilePath
+      fileMap = Map.fromList
+        [ (AttachmentId "sdflkjs", "files/dummy.pdf")
+        , (AttachmentId "woidclm", "files/simple.txt")
+        , (AttachmentId "wqowok", "files/dummy.pdf")
+        , (AttachmentId "apoijmnsoi", "files/lambda.jpeg")
+        ]
+  case Map.lookup attachmentId' fileMap of
+    Nothing -> throwError err404
+    Just filePath -> liftIO $ BS.readFile filePath
 
 notes :: Map NoteId Note
 notes = Map.fromList

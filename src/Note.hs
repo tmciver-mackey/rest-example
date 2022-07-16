@@ -7,7 +7,7 @@ module Note where
 import Protolude
 
 import Data.Aeson
-import Servant (FromHttpApiData)
+import Servant (FromHttpApiData, MimeRender)
 
 newtype Tag = Tag Text
   deriving (Eq, Ord, Show, Generic)
@@ -19,7 +19,7 @@ newtype NoteId = NoteId Text
 
 newtype AttachmentId = AttachmentId Text
   deriving (Eq, Ord, Show, Generic)
-  deriving (ToJSON) via Text
+  deriving (ToJSON, FromHttpApiData) via Text
 
 data Note = Note
   { noteId :: NoteId

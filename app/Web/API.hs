@@ -5,6 +5,8 @@
 
 module Web.API where
 
+import Protolude
+
 import Note
 import Servant
 
@@ -15,3 +17,7 @@ type API =
   :<|> "note"
   :> Capture "noteId" NoteId
   :> Get '[JSON] Note
+
+  :<|> "file"
+  :> Capture "attachmentId" AttachmentId
+  :> Get '[OctetStream] ByteString
