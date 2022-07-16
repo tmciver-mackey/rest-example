@@ -25,6 +25,7 @@ source-repository head
 library
   exposed-modules:
       Lib
+      Note
   other-modules:
       Paths_rest_example
   hs-source-dirs:
@@ -32,6 +33,8 @@ library
   build-depends:
       aeson
     , base >=4.7 && <5
+    , containers
+    , protolude
     , servant-server
     , wai
     , warp
@@ -40,6 +43,8 @@ library
 executable rest-example-exe
   main-is: Main.hs
   other-modules:
+      Web.API
+      Web.Server
       Paths_rest_example
   hs-source-dirs:
       app
@@ -47,6 +52,8 @@ executable rest-example-exe
   build-depends:
       aeson
     , base
+    , containers
+    , protolude
     , rest-example
     , servant-server
     , wai
@@ -64,9 +71,11 @@ test-suite rest-example-test
   build-depends:
       aeson
     , base
+    , containers
     , hspec
     , hspec-wai
     , hspec-wai-json
+    , protolude
     , rest-example
     , servant-server
     , wai

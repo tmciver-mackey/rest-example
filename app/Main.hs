@@ -1,6 +1,9 @@
 module Main where
 
-import Lib
+import Protolude
+
+import Network.Wai.Handler.Warp
+import Web.Server
 
 main :: IO ()
-main = startApp
+main = run 8081 app
