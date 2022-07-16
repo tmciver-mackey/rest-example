@@ -8,13 +8,13 @@ module Web.Server (app) where
 import Protolude
 
 import Data.Aeson
-import Data.Aeson.TH
-import qualified Data.Set as Set
+-- import Data.Aeson.TH
 import Network.Wai
 
 import Servant
 
 import Web.API
+import Web.Handlers
 import Note
 
 app :: Application
@@ -24,9 +24,6 @@ api :: Proxy API
 api = Proxy
 
 server :: Server API
-server = pure notes
-
-notes :: [Note]
-notes = [ Note (NoteId "abc") "My first note" "Lorem Ipsum" (Set.fromList [Tag "IBM", Tag "AAPL"])
-        , Note (NoteId "123") "My second note" "Lorem Ipsum" Set.empty
-        ]
+server =
+       allNotes
+  :<|> getNoteById

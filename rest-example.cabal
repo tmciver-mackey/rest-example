@@ -44,6 +44,7 @@ executable rest-example-exe
   main-is: Main.hs
   other-modules:
       Web.API
+      Web.Handlers
       Web.Server
       Paths_rest_example
   hs-source-dirs:

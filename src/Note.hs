@@ -7,14 +7,15 @@ module Note where
 import Protolude
 
 import Data.Aeson
+import Servant (FromHttpApiData)
 
 newtype Tag = Tag Text
   deriving (Eq, Ord, Show, Generic)
   deriving (ToJSON) via Text
 
 newtype NoteId = NoteId Text
-  deriving (Eq, Show, Generic)
-  deriving (ToJSON) via Text
+  deriving (Eq, Ord, Show, Generic)
+  deriving (ToJSON, FromHttpApiData) via Text
 
 data Note = Note
   { noteId :: NoteId

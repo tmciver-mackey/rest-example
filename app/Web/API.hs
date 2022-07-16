@@ -7,9 +7,13 @@ module Web.API where
 
 import Protolude
 
-import Note (Note)
+import Note
 import Servant
 
 type API =
      "notes"
   :> Get '[JSON] [Note]
+
+  :<|> "note"
+  :> Capture "noteId" NoteId
+  :> Get '[JSON] Note
