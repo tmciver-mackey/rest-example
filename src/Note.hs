@@ -1,6 +1,8 @@
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DerivingVia #-}
+{-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 module Note where
 
@@ -8,6 +10,7 @@ import Protolude
 
 import Data.Aeson
 import Servant (FromHttpApiData, MimeRender)
+import qualified Data.Set as Set
 
 newtype Tag = Tag Text
   deriving (Eq, Ord, Show, Generic)
@@ -27,7 +30,13 @@ data Attachment = Attachment
   } deriving (Eq, Ord, Show, Generic)
 
 instance ToJSON Attachment where
-  toJSON = genericToJSON defaultOptions { fieldLabelModifier = camelTo2 '_' . drop 6 }
+  toJSON Attachment{..} = object
+    [ "fileName" .= attachFileName
+    , "_links" .= object
+      [ "_self" .= let AttachmentId attId = attachId
+                   in "http://localhost:8081/file/" <> attId
+      ]
+    ]
 
 data Note = Note
   { noteId :: NoteId
@@ -38,4 +47,16 @@ data Note = Note
   } deriving (Eq, Show, Generic)
 
 instance ToJSON Note where
-  toJSON = genericToJSON defaultOptions { fieldLabelModifier = camelTo2 '_' . drop 4 }
+  toJSON Note{..} = object
+    [ "title" .= noteTitle
+    , "body" .= noteBody
+    , "tags" .= toJSON noteTags
+    , "_links" .= object
+      [ "_self" .= let NoteId nId = noteId
+                   in "http://localhost:8081/note/" <> nId
+      ]
+    , "_embedded" .= object
+      [ "attachments" .=
+        (toJSON <$> Set.toList noteAttachments)
+      ]
+    ]
