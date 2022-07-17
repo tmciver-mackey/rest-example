@@ -24,7 +24,9 @@ dependencies:
 - aeson
 - bytestring
 - containers
+- filepath
 - servant-server
+- text
 - wai
 - warp
 

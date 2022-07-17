@@ -20,4 +20,4 @@ server :: Server API
 server =
        allNotes
   :<|> getNoteById
-  :<|> getAttachmentById
+  :<|> getAttachmentDataById

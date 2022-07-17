@@ -4,16 +4,19 @@
 module Web.Handlers
     ( allNotes
     , getNoteById
-    , getAttachmentById
+    , getAttachmentDataById
     ) where
 
 import Protolude hiding (Handler)
 
 import qualified Data.ByteString as BS
 import qualified Data.Map as Map
+import qualified Data.Text as T
+import Data.Maybe (fromJust)
 import qualified Data.Set as Set
 import Note
 import Servant
+import System.FilePath.Posix (takeFileName)
 
 allNotes :: Handler [Note]
 allNotes = pure $ Map.elems notes
@@ -24,18 +27,24 @@ getNoteById noteId' =
     Nothing -> throwError err404
     Just n -> pure n
 
-getAttachmentById :: AttachmentId -> Handler ByteString
-getAttachmentById attachmentId' = do
-  let fileMap :: Map AttachmentId FilePath
-      fileMap = Map.fromList
-        [ (AttachmentId "sdflkjs", "files/dummy.pdf")
-        , (AttachmentId "woidclm", "files/simple.txt")
-        , (AttachmentId "wqowok", "files/dummy.pdf")
-        , (AttachmentId "apoijmnsoi", "files/lambda.jpeg")
-        ]
+fileMap :: Map AttachmentId FilePath
+fileMap = Map.fromList
+  [ (AttachmentId "sdflkjs", "files/dummy.pdf")
+  , (AttachmentId "woidclm", "files/simple.txt")
+  , (AttachmentId "wqowok", "files/dummy.pdf")
+  , (AttachmentId "apoijmnsoi", "files/lambda.jpeg")
+  ]
+
+getAttachmentDataById :: AttachmentId -> Handler ByteString
+getAttachmentDataById attachmentId' =
   case Map.lookup attachmentId' fileMap of
     Nothing -> throwError err404
     Just filePath -> liftIO $ BS.readFile filePath
+
+attachmentFromId :: AttachmentId -> Attachment
+attachmentFromId attachId =
+  let fileName = T.pack . takeFileName . fromJust $ Map.lookup attachId fileMap
+  in Attachment attachId fileName
 
 notes :: Map NoteId Note
 notes = Map.fromList
@@ -43,12 +52,12 @@ notes = Map.fromList
                         "My first note"
                         "Lorem Ipsum"
                         (Set.fromList [Tag "IBM", Tag "AAPL"])
-                        (Set.fromList [AttachmentId "sdflkjs", AttachmentId "woidclm"])
+                        (Set.fromList $ attachmentFromId <$> [AttachmentId "sdflkjs", AttachmentId "woidclm"])
     )
   , (NoteId "123", Note (NoteId "123")
                         "My second note"
                         "Lorem Ipsum"
                         Set.empty
-                        (Set.fromList [AttachmentId "wqowok", AttachmentId "apoijmnsoi"])
+                        (Set.fromList $ attachmentFromId <$> [AttachmentId "wqowok", AttachmentId "apoijmnsoi"])
     )
   ]
