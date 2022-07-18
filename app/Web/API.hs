@@ -12,11 +12,11 @@ import Servant
 
 type API =
      "notes"
-  :> Get '[JSON, NoteHAL] [Note]
+  :> Get '[JSON, NoteHAL, PlainText] [Note]
 
   :<|> "note"
   :> Capture "noteId" NoteId
-  :> Get '[JSON, NoteHAL] Note
+  :> Get '[JSON, NoteHAL, PlainText] Note
 
   :<|> "file"
   :> Capture "attachmentId" AttachmentId
