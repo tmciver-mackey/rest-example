@@ -25,6 +25,7 @@ dependencies:
 - bytestring
 - containers
 - filepath
+- http-media
 - servant-server
 - text
 - wai

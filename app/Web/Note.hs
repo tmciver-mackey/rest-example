@@ -1,13 +1,17 @@
 {-# LANGUAGE NoImplicitPrelude #-}
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DerivingVia #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE FlexibleInstances #-}
 
 module Web.Note where
 
 import Protolude
 
 import Data.Aeson
-import Servant (FromHttpApiData)
+import Servant (FromHttpApiData, Accept (..), MimeRender (..))
+import Network.HTTP.Media.MediaType ((//))
 
 newtype AttachmentId = AttachmentId Text
   deriving (Eq, Ord, Show)
@@ -53,3 +57,11 @@ data Note = Note
 
 instance ToJSON Note where
   toJSON = genericToJSON defaultOptions { fieldLabelModifier = camelTo2 '_' . drop 4 }
+
+data NoteHAL
+
+instance Accept NoteHAL where
+  contentType _ = "application" // "vnd.verity.note-hal+json"
+
+instance ToJSON a => MimeRender NoteHAL a where
+  mimeRender _ = encode
