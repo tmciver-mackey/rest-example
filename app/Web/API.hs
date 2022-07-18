@@ -7,7 +7,7 @@ module Web.API where
 
 import Protolude
 
-import Note
+import Web.Note
 import Servant
 
 type API =

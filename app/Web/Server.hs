@@ -18,6 +18,6 @@ api = Proxy
 
 server :: Server API
 server =
-       allNotes
+       getAllNotes
   :<|> getNoteById
   :<|> getAttachmentDataById
